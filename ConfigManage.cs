@@ -110,14 +110,14 @@ namespace zz_tracker_client
                 catch { data.path = "./"; }
             }
 
-            if (data.boot_on != "true" || data.boot_on != "false")
+            if (data.boot_on != true.ToString() && data.boot_on != false.ToString())
             {
-                data.boot_on = "false";
+                data.boot_on = false.ToString();
             }
 
-            if (data.exif != "true" || data.exif != "false")
+            if (data.exif != true.ToString() && data.exif != false.ToString())
             {
-                data.exif = "false";
+                data.exif = false.ToString();
             }
 
 

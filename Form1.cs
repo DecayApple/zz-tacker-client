@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using IWshRuntimeLibrary;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Newtonsoft.Json.Linq;
@@ -263,43 +264,32 @@ namespace zz_tracker_client
             conf.boot_on = runonboot_check.Checked.ToString();
             conf.path = down_path_label.Text;
             conf.twit_last = _config.getConfig().twit_last;
-
+            //MessageBox.Show(conf.boot_on);
             _config.writeConfigData(conf);
             _config.loadConfigData();
 
-            
-            if(runonboot_check.Checked) //ref https://codeggoon.tistory.com/34
+            WshShell wshShell = new WshShell();
+            IWshRuntimeLibrary.IWshShortcut shortcut;
+            string startUpFolderPath =
+              Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+            if (runonboot_check.Checked) 
             {
-                try
-                {
-                    // 시작프로그램 등록하는 레지스트리
-                    string runKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
-                    RegistryKey strUpKey = Registry.LocalMachine.OpenSubKey(runKey);
-                    if (strUpKey.GetValue("zz-Tracker-exe") == null)
-                    {
-                        strUpKey.Close();
-                        strUpKey = Registry.LocalMachine.OpenSubKey(runKey, true);
-                        // 시작프로그램 등록명과 exe경로를 레지스트리에 등록
-                        strUpKey.SetValue("zz-Tracker-exe", Application.ExecutablePath);
-                    }
-                }
-                catch
-                {
-                    MessageBox.Show("Add Startup Fail");
-                }
+                shortcut =
+              (IWshRuntimeLibrary.IWshShortcut)wshShell.CreateShortcut(
+                startUpFolderPath + "\\" +
+                Application.ProductName + ".lnk");
+
+                shortcut.TargetPath = Application.ExecutablePath;
+                shortcut.WorkingDirectory = Application.StartupPath;
+                shortcut.Description = "Launch My Application";
+                // shortcut.IconLocation = Application.StartupPath + @"\App.ico";
+                shortcut.Save();
             }
             else
             {
-                try
+                if(System.IO.File.Exists(startUpFolderPath + "\\" + Application.ProductName + ".lnk"))
                 {
-                    string runKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
-                    RegistryKey strUpKey = Registry.LocalMachine.OpenSubKey(runKey, true);
-                    // 레지스트리값 제거
-                    strUpKey.DeleteValue("zz-Tracker-exe");
-                }
-                catch
-                {
-                    ;// MessageBox.Show("Remove Startup Fail");
+                    System.IO.File.Delete(startUpFolderPath + "\\" + Application.ProductName + ".lnk");
                 }
             }
 
