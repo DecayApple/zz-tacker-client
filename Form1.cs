@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CompactExifLib;
 using IWshRuntimeLibrary;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
@@ -167,6 +168,33 @@ namespace zz_tracker_client
                                 Path.Combine(target_path, fileName)
                                 ) ;
                             Console.WriteLine("Download ok!");
+
+                            if ( _config.getConfig().exif == true.ToString() )
+                            {
+                                ExifData exif = new ExifData(Path.Combine(target_path, fileName));
+                                DateTime DateTaken;
+
+                                byte[] output;
+                                int output_length;
+                                ExifTagType output_type;
+                                if ( !exif.GetTagRawData(ExifTag.Artist, out output_type, out output_length, out output))
+                                {
+                                    exif.SetTagValue(ExifTag.Artist, target_screen, StrCoding.Utf8);
+                                }
+                                if( !exif.GetTagRawData(ExifTag.DateTime, out output_type, out output_length, out output))
+                                {
+                                    exif.SetTagValue(ExifTag.DateTimeOriginal, obj["created_at"].ToString(), StrCoding.Utf8);
+                                }
+                                if (!exif.GetTagRawData(ExifTag.UserComment, out output_type, out output_length, out output))
+                                {
+                                    string[] descipt = obj["text"].ToString().Split(' ');
+                                    string url = descipt[descipt.Count() - 1];
+                                    exif.SetTagValue(ExifTag.UserComment, url, StrCoding.Utf8);
+                                }
+                                exif.Save();
+                            }
+
+
                             Console.WriteLine("{0} :: {1}", sub["id_str"].ToString(), _config.getConfig().twit_last);
                             if (ulong.Parse(sub["id_str"].ToString()) > ulong.Parse(_config.getConfig().twit_last))
                             {

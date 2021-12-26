@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigManage.cs" />
+    <Compile Include="ExifData.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -107,6 +108,9 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="MetadataExtractor">
+      <Version>2.7.1</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.WindowsAPICodePack-Shell">
       <Version>1.1.0</Version>
     </PackageReference>

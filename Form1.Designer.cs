@@ -268,7 +268,6 @@
             // 
             this.extraexif_check.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.extraexif_check.AutoSize = true;
-            this.extraexif_check.Enabled = false;
             this.extraexif_check.Location = new System.Drawing.Point(125, 119);
             this.extraexif_check.Margin = new System.Windows.Forms.Padding(3, 1, 1, 1);
             this.extraexif_check.Name = "extraexif_check";
@@ -382,7 +381,6 @@
             // 
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
-            this.label5.Enabled = false;
             this.label5.Location = new System.Drawing.Point(3, 120);
             this.label5.Margin = new System.Windows.Forms.Padding(3, 1, 1, 1);
             this.label5.Name = "label5";
